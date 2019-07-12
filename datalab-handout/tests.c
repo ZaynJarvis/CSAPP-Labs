@@ -97,22 +97,33 @@ int test_floatFloat2Int(unsigned uf) {
   return x;
 }
 unsigned test_floatPower2(int x) {
-  float result = 1.0;
-  float p2 = 2.0;
-  int recip = (x < 0);
-  /* treat tmin specially */
-  if ((unsigned)x == 0x80000000) {
-      return 0;
+	if (x > 127) {
+    return 0xff << 23;
+  } else if (x < -149) { // x < -149
+    return 0;
+  } else if (x < -126) { // x < -126
+    return 1 << (x + 149);
+  } else {
+    return (x + 0x7f) << 23;
   }
-  if (recip) {
-    x = -x;
-    p2 = 0.5;
-  }
-  while (x > 0) {
-    if (x & 0x1)
-      result = result * p2;
-    p2 = p2 * p2;
-    x >>= 1;
-  }
-  return f2u(result);
+	/*
+	float result = 1.0;
+	float p2 = 2.0;
+	int recip = (x < 0);
+	[> treat tmin specially <]
+	if ((unsigned)x == 0x80000000) {
+			return 0;
+	}
+	if (recip) {
+		x = -x;
+		p2 = 0.5;
+	}
+	while (x > 0) {
+		if (x & 0x1)
+			result = result * p2;
+		p2 = p2 * p2;
+		x >>= 1;
+	}
+	return f2u(result);
+	*/
 }

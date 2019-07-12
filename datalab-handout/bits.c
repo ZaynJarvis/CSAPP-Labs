@@ -360,22 +360,13 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-	int temp;
-	// x > 0;
-	int b = !(x >> 31);
-	// x > 127
-	if (b && !!(x >> 7)) {
+	if (x > 127) {
 		return 0xff << 23;
+	} else if (x < -149) { // x < -149
+		return 0;
+	} else if (x < -126) { // x < -126
+		return 1 << (x + 149);
+	} else {
+		return (x + 0x7f) << 23;
 	} 
-	// x > -126 
-	temp = x + 126;
-	if (!(temp >> 31)) {
-		return (temp + 1) << 23;
-	}
-	// x > -149
-	temp = x + 149;
-	if (!(temp >> 31)) {
-		return 1 << (temp);
-	}
-	return 0;
 }
