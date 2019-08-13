@@ -20,8 +20,21 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  *     be graded. 
  */
 char transpose_submit_desc[] = "Transpose submission";
-void transpose_submit(int M, int N, int A[N][M], int B[M][N])
+void transpose_submit(int M, int N, int A[N][M], int B[M][N]) // general purpose solution works awefully in 32*32 and 64*64
 {
+    int b_size = 16;
+    int m = b_size * (M / b_size);
+    int n = b_size * (N / b_size);
+
+    for (int ii = 0; ii <= n; ii += b_size)
+        for (int jj = 0; jj <= m; jj += b_size)
+            for (int j = jj; j < jj + b_size && j < M; j++)
+            {
+                for (int i = ii; i < ii + b_size && i < N; i++)
+                {
+                    B[j][i] = A[i][j];
+                }
+            }
 }
 
 /* 
